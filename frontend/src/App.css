@@ -1,18 +1,49 @@
-.App {
-
-  /* Example styles */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-
-  background-color: #000000;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(15px + 5vmin);
-  color: rgb(255, 0, 0);
+/* HomePage.css */
+.btn-primary {
+  background-color: red !important;
+  border-color: yellow;
 }
+
+/* Container styling */
+.homepage-container {
+  padding: 2rem;
+  background-color: #514e4e; /*Choose background color */
+  min-height: 100vh;
+}
+
+/* Title */
+.homepage-title {
+  font-size: 7rem;
+  font-weight: bold;
+  color: #eaddd4;
+  margin-bottom: 2rem;
+}
+
+/* Button group */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Individual buttons */
+.button-group .btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.button-group .btn:hover {
+  transform: scale(1.05);
+  border-color: yellow;
+}
+
+/* Content wrapper */
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+} 
+
 
