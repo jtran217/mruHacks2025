@@ -1,25 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+function App(){
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Game Code:</h1>
+      <h2>GAAME COODE</h2>
+      <h1>Enter Game Code</h1>
+      <input type="text" placeholder='Enter Game Code Here'></input>
     </div>
-  );
+  )
+}
+
+function Code(){
+
 }
 
 export default App;
+export {Code};
