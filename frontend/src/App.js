@@ -1,19 +1,15 @@
-import './App.css';
+import JoinGame from './EnterGame';
+import './NewGame.css';
 
 function App(){
   return (
-    <div>
-      <h1>Game Code:</h1>
-      <h2>GAAME COODE</h2>
-      <h1>Enter Game Code</h1>
-      <input type="text" placeholder='Enter Game Code Here'></input>
+    <div className='NewGame'>
+      <h1>Join Game With This Code:</h1>
+      <h2>CODE CODE CODE</h2>
+      {false && <JoinGame/>  }
     </div>
   )
 }
 
-function Code(){
-
-}
 
 export default App;
-export {Code};

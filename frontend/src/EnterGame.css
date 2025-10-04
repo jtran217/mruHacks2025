@@ -1,0 +1,36 @@
+/* JoinGame.css */
+
+/* Container for JoinGame component */
+.JoinGame {
+  background-color: #ffffff;
+  padding: 25px;
+  margin: 0 auto;
+  width: 320px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Label text */
+.JoinGame p {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #2c3e50;
+}
+
+/* Input field */
+.JoinGame input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+/* Input focus effect */
+.JoinGame input[type="text"]:focus {
+  border-color: #2980b9;
+  outline: none;
+}
