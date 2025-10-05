@@ -66,7 +66,7 @@ DungeonLink/
    ```bash
    node Server.js
    ```
-   - Default URL: **http://localhost:8000**
+   - Default URL: **http://localhost:12000**
 
 ---
 
