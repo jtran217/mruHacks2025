@@ -1,0 +1,78 @@
+const WebSocket = require('ws');
+const http = require('http');
+const express = require('express');
+const cors = require('cors'); // Import the CORS package
+
+const PORT = 12000;
+
+// Create an Express app
+const app = express();
+
+// Middleware to parse JSON requests
+app.use(express.json());
+
+// Enable CORS
+app.use(cors());
+
+// Store dynamically created WebSocket servers
+const gameServers = new Map();
+
+// Define an API endpoint to create a new game
+app.post('/api/newGame', (req, res) => {
+  const { gameId } = req.body;
+
+  if (gameServers.has(gameId)) {
+    return res.status(400).json({ message: 'Game already exists!' });
+  }
+
+  // Create a new HTTP server for the game
+  const gameServer = http.createServer();
+  const wss = new WebSocket.Server({ server: gameServer });
+
+  // Store the WebSocket server in the map
+  gameServers.set(gameId, { server: gameServer, wss });
+
+  console.log(`New WebSocket server created for game: ${gameId}`);
+
+  // Handle WebSocket connections for this game
+  wss.on('connection', (ws) => {
+    console.log(`New client connected to game: ${gameId}`);
+
+    // Send a welcome message to the client
+    ws.send(JSON.stringify({ message: `Welcome to game ${gameId}!` }));
+
+    // Listen for messages from the client
+    ws.on('message', (message) => {
+      console.log(`Game ${gameId} received: ${message}`);
+      // Broadcast the message to all clients in this game
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ message: `Game ${gameId}: ${message}` }));
+        }
+      });
+    });
+
+    // Handle client disconnection
+    ws.on('close', () => {
+      console.log(`Client disconnected from game: ${gameId}`);
+    });
+
+    // Handle errors
+    ws.on('error', (err) => {
+      console.error(`WebSocket error in game ${gameId}:`, err);
+    });
+  });
+
+  // Start the game server on a dynamic port
+  gameServer.listen(0, () => {
+    const address = gameServer.address();
+    console.log(`Game ${gameId} WebSocket server is running on ws://localhost:${address.port}`);
+    res.json({ message: `Game ${gameId} created!`, wsUrl: `ws://localhost:${address.port}` });
+  });
+});
+
+// Start the main HTTP server
+const server = http.createServer(app);
+server.listen(PORT, () => {
+  console.log(`HTTP server is running on http://localhost:${PORT}`);
+});
