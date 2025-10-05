@@ -1,0 +1,53 @@
+.game-room {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .story-box {
+    width: 80%; /* Set a fixed width for the story box */
+    max-width: 800px; /* Optional: Limit the maximum width */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .story-content {
+    max-height: 300px; /* Set the maximum height for the story box */
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
+    padding: 10px; /* Optional: Add padding for better readability */
+    border: 1px solid #ccc; /* Optional: Add a border for visibility */
+    background-color: #f9f9f9; /* Optional: Add a background color */
+    border-radius: 5px; /* Optional: Add rounded corners */
+  }
+
+  .scrollable-content {
+    max-height: 300px; /* Set the maximum height for the story box */
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
+    word-wrap: break-word; /* Ensure long words or text wrap within the container */
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+  }
+  
+  .input-box {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .input-box input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .input-box button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
