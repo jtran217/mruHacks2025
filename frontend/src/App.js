@@ -11,7 +11,7 @@ function App() {
   // Create a new game and get the WebSocket URL
   const handleCreateGame = async () => {
     try {
-      const response = await fetch('http://localhost:12000/api/newGame', {
+      const response = await fetch('http://10.239.74.30:12000/api/newGame', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId }),
@@ -30,7 +30,11 @@ function App() {
       setError(err.message);
     }
   };
-
+  const handleJoinGame = () => {
+    setWsUrl(`ws://10.239.74.30:${gameId}`);
+    console.log(wsUrl)
+    handleConnectToGame();
+  }
   // Connect to the game WebSocket server
   const handleConnectToGame = () => {
     if (!wsUrl) {
@@ -95,9 +99,9 @@ function App() {
             type="text"
             value={gameId}
             onChange={(e) => setGameId(e.target.value)}
-            placeholder="Enter Game ID"
+            placeholder="Game Code"
           />
-          <button onClick={handleCreateGame}>Create Game</button>
+          <button onClick={handleJoinGame}>Join Game</button>
         </div>
         <div>
           <button onClick={handleConnectToGame}>Connect to Game</button>

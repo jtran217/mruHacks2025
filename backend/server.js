@@ -18,56 +18,54 @@ app.use(cors());
 const gameServers = new Map();
 
 // Define an API endpoint to create a new game
-app.post('/api/newGame', (req, res) => {
-  const { gameId } = req.body;
-
-  if (gameServers.has(gameId)) {
-    return res.status(400).json({ message: 'Game already exists!' });
-  }
-
+app.get('/api/newGame', (req, res) => {
   // Create a new HTTP server for the game
   const gameServer = http.createServer();
   const wss = new WebSocket.Server({ server: gameServer });
 
   // Store the WebSocket server in the map
-  gameServers.set(gameId, { server: gameServer, wss });
+  const gameID = 12
+  gameServers.set(gameID, { server: gameServer, wss });
 
-  console.log(`New WebSocket server created for game: ${gameId}`);
+  console.log(`New WebSocket server created for game: ${gameID}`);
 
   // Handle WebSocket connections for this game
   wss.on('connection', (ws) => {
-    console.log(`New client connected to game: ${gameId}`);
+    console.log(`New client connected to game: ${gameID}`);
 
     // Send a welcome message to the client
-    ws.send(JSON.stringify({ message: `Welcome to game ${gameId}!` }));
+    ws.send(JSON.stringify({ message: `Welcome to game ${gameID}!` }));
 
     // Listen for messages from the client
     ws.on('message', (message) => {
-      console.log(`Game ${gameId} received: ${message}`);
+      console.log(`Game ${gameID} received: ${message}`);
       // Broadcast the message to all clients in this game
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ message: `Game ${gameId}: ${message}` }));
+          client.send(JSON.stringify({ message: `Game ${gameID}: ${message}` }));
         }
       });
     });
 
     // Handle client disconnection
     ws.on('close', () => {
-      console.log(`Client disconnected from game: ${gameId}`);
+      console.log(`Client disconnected from game: ${gameID}`);
     });
 
     // Handle errors
     ws.on('error', (err) => {
-      console.error(`WebSocket error in game ${gameId}:`, err);
+      console.error(`WebSocket error in game ${gameID}:`, err);
     });
   });
 
   // Start the game server on a dynamic port
   gameServer.listen(0, () => {
     const address = gameServer.address();
-    console.log(`Game ${gameId} WebSocket server is running on ws://localhost:${address.port}`);
-    res.json({ message: `Game ${gameId} created!`, wsUrl: `ws://localhost:${address.port}` });
+    console.log(`Game ${gameID} WebSocket server is running on ws://localhost:${address.port}`);
+    res.json({ message: `Game ${gameID} created!`, 
+                wsUrl: `ws://localhost:${address.port}`,
+                // Change IP when testing server on your machine using ipconfig getifaddr en0
+                gameCode: address.port });
   });
 });
 
