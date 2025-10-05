@@ -80,6 +80,12 @@ function HomePage() {
   
   }
 
+  const sendMessage = (message) => {
+    // Send message to server using socket
+    console.log("Sending message: ", message);
+    socket.send(JSON.stringify({ message: message }));
+  }
+
   return (
     <div className="homepage-container text-center">
       {view == null && (
@@ -96,6 +102,7 @@ function HomePage() {
         <div className="content-box">
           {view === 'new' && <NewGame gameID={gameID}/>}
           {view === 'join' && <JoinGame submitCode={connectToServer} />}
+          {view === 'game' && <GameScreen handleEnter={sendMessage}/>}
           {view === 'game' && <GameScreen message={messages[messages.length-1]} />}
         </div>
       </div>
