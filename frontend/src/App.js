@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import NewGame from './NewGame';
 import JoinGame from './JoinGame';
 import GameScreen from './GameScreen';
@@ -26,7 +26,7 @@ function HomePage() {
       }
 
       const data = await res.json();
-      setWsUrl(data.wsUrl); // Save the WebSocket URL
+      setWsUrl(data.wsUrl); 
       setGameID(data.gameID);
       console.log(`Game created! WebSocket URL: ${data.wsUrl}, GameID: ${data.gameID}`);
       connectToServer(data.gameID);
@@ -103,6 +103,7 @@ function HomePage() {
           {view === 'new' && <NewGame gameID={gameID}/>}
           {view === 'join' && <JoinGame submitCode={connectToServer} />}
           {view === 'game' && <GameScreen handleEnter={sendMessage}/>}
+          {view === 'game' && <GameScreen message={messages[messages.length-1]} />}
         </div>
       </div>
     </div>
