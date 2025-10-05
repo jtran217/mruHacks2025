@@ -9,6 +9,7 @@ function GameScreen({ handleEnter, message }) {
     if (event.key === "Enter")
     {
         handleEnter(input);
+        setInput("");
     }
   }
 
