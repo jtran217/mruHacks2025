@@ -23,9 +23,6 @@ app.get("/api/newGame", (req, res) => {
   const gameServer = http.createServer();
   const wss = new WebSocket.Server({ server: gameServer });
 
-  // Store the WebSocket server in the map
-
-//   const gameID = gameServer.address().port;
   const gameID = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
 
   gameServers.set(gameID, { server: gameServer, wss });
@@ -38,18 +35,12 @@ app.get("/api/newGame", (req, res) => {
     broadcastConnectionCount(wss);
     // Send a welcome message to the client
     ws.send(JSON.stringify({ message: `Welcome to game ${gameID}!` }));
+    startStory(wss);
 
     // Listen for messages from the client
     ws.on("message", (message) => {
       console.log(`Game ${gameID} received: ${message}`);
-      // Broadcast the message to all clients in this game
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(
-            JSON.stringify({ message: `Game ${gameID}: ${message}` })
-          );
-        }
-      });
+      ws.send(JSON.stringify({ message: `${message}` }));
     });
 
     // Handle client disconnection
@@ -86,6 +77,17 @@ function broadcastConnectionCount(wss) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(payload);
     }
+  }
+}
+
+function startStory(wss) {
+  const count = wss.clients.size;
+  if (count === 2) {
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ message: "The story will appear here.." }));
+        }
+      });
   }
 }
 
