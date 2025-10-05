@@ -2,8 +2,11 @@ const WebSocket = require("ws");
 const http = require("http");
 const express = require("express");
 const cors = require("cors"); // Import the CORS package
+const turns = require('./story.js');
 
 const PORT = 12000;
+
+let turnCounter = 0;
 
 // Create an Express app
 const app = express();
@@ -85,7 +88,7 @@ function startStory(wss) {
   if (count === 2) {
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ message: "The story will appear here.." }));
+          client.send(JSON.stringify({ message: "You and your best friend are at the local tavern in the kingdom. There are twin maidens across the bar who catch your eyes. This is the perfect opportunity to link up with them! As you approach them, they see you and grow a look of disgust. The moment you guys say “hello”?, the maidens scream and accuse you of harassment. It turns out, they are the esteemed twin daughters of the king! The two of you black out as the guards take you both away to the dungeon. When you wake up, you realize that you have been separated into 2 different cells. Luckily, you are both wizards, so teleporting out of the dungeon is possible! All you need to do is acquire 5 magic sausage links in order to perform the teleportation spell!" }));
         }
       });
   }
