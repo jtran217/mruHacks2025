@@ -2,11 +2,15 @@ const WebSocket = require("ws");
 const http = require("http");
 const express = require("express");
 const cors = require("cors"); // Import the CORS package
-const turns = require('./story.js');
+const p1Turns = require('./P1Turns.js');
+const p2Turns = require('./P2Turns.js');
 
 const PORT = 12000;
 
-let turnCounter = 0;
+let p1TurnCounter = 0;
+let p2TurnCounter = 0;
+
+let clients = [];
 
 // Create an Express app
 const app = express();
@@ -22,6 +26,7 @@ const gameServers = new Map();
 
 // Define an API endpoint to create a new game
 app.get("/api/newGame", (req, res) => {
+    
   // Create a new HTTP server for the game
   const gameServer = http.createServer();
   const wss = new WebSocket.Server({ server: gameServer });
@@ -35,6 +40,8 @@ app.get("/api/newGame", (req, res) => {
   // Handle WebSocket connections for this game
   wss.on("connection", (ws) => {
     console.log(`New client connected to game: ${gameID}`);
+    ws.clientID = clients.length;
+    clients.push(ws);
     broadcastConnectionCount(wss);
     // Send a welcome message to the client
     ws.send(JSON.stringify({ message: `Welcome to game ${gameID}!` }));
@@ -43,7 +50,32 @@ app.get("/api/newGame", (req, res) => {
     // Listen for messages from the client
     ws.on("message", (message) => {
       console.log(`Game ${gameID} received: ${message}`);
-      ws.send(JSON.stringify({ message: `${message}` }));
+      console.log(ws.clientID);
+      if (ws.clientID === 1) {
+        socket = clients[0];
+
+        let text = p1Turns[p1TurnCounter]["description"];
+
+        const optionKeys = Object.keys(p1Turns[p1TurnCounter]["options"]);
+
+        optionKeys.forEach((key, index) => {
+            text += `\n${index + 1}. ${key}`;
+        });
+        socket.send(JSON.stringify({ message: text }));
+        p1TurnCounter += 1;
+
+      } else if (ws.clientID === 0) {
+        socket = clients[1];
+        let text = p2Turns[p2TurnCounter]["description"];
+
+        const optionKeys = Object.keys(p2Turns[p2TurnCounter]["options"]);
+
+        optionKeys.forEach((key, index) => {
+            text += `\n${index + 1}. ${key}`;
+        });
+        socket.send(JSON.stringify({ message: text }));
+        p2TurnCounter += 1;
+      }
     });
 
     // Handle client disconnection
