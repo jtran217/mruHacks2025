@@ -9,6 +9,9 @@ const PORT = 12000;
 
 let p1TurnCounter = 0;
 let p2TurnCounter = 0;
+let p1Outcome = "";
+let p2Outcome = "";
+let firstTurn = true;
 
 let clients = [];
 
@@ -50,32 +53,59 @@ app.get("/api/newGame", (req, res) => {
     // Listen for messages from the client
     ws.on("message", (message) => {
       console.log(`Game ${gameID} received: ${message}`);
-      console.log(ws.clientID);
-      if (ws.clientID === 1) {
-        socket = clients[0];
+      if (!firstTurn) {
+        const data = message.toString();
+        const parsed = JSON.parse(data);
+        const choice = parseInt(parsed.message);
+        if (ws.clientID === 1) {
+            // Send outcome immediately to the message sender based on their input
+            const options = Object.keys(p2Turns[p2TurnCounter]["options"]);
+            let text = p2Turns[p2TurnCounter]["options"][options[choice - 1]].outcome
+            p2TurnCounter += 1;
+            ws.send(JSON.stringify({ message: text }));
 
+            socket = clients[0];
+
+            text = p1Turns[p1TurnCounter]["description"];
+
+            const optionKeys = Object.keys(p1Turns[p1TurnCounter]["options"]);
+
+            optionKeys.forEach((key, index) => {
+                text += `\n${index + 1}. ${key}`;
+            });
+            socket.send(JSON.stringify({ message: text }));
+
+        } else if (ws.clientID === 0) {
+            // Send outcome immediately to the message sender based on their input
+            const options = Object.keys(p1Turns[p1TurnCounter]["options"]);
+            let text = p1Turns[p1TurnCounter]["options"][options[choice - 1]].outcome
+            p1TurnCounter += 1;
+            ws.send(JSON.stringify({ message: text }));
+
+            // Then send prompt to flip flopped user
+            socket = clients[1];
+            text = p2Turns[p2TurnCounter]["description"];
+
+            const optionKeys = Object.keys(p2Turns[p2TurnCounter]["options"]);
+
+            optionKeys.forEach((key, index) => {
+                text += `\n${index + 1}. ${key}`;
+            });
+            socket.send(JSON.stringify({ message: text }));
+        }
+      } else {
+        firstTurn = false;
+        socket = clients[0];
         let text = p1Turns[p1TurnCounter]["description"];
 
-        const optionKeys = Object.keys(p1Turns[p1TurnCounter]["options"]);
+            const optionKeys = Object.keys(p1Turns[p1TurnCounter]["options"]);
 
-        optionKeys.forEach((key, index) => {
-            text += `\n${index + 1}. ${key}`;
-        });
-        socket.send(JSON.stringify({ message: text }));
-        p1TurnCounter += 1;
-
-      } else if (ws.clientID === 0) {
-        socket = clients[1];
-        let text = p2Turns[p2TurnCounter]["description"];
-
-        const optionKeys = Object.keys(p2Turns[p2TurnCounter]["options"]);
-
-        optionKeys.forEach((key, index) => {
-            text += `\n${index + 1}. ${key}`;
-        });
-        socket.send(JSON.stringify({ message: text }));
-        p2TurnCounter += 1;
-      }
+            optionKeys.forEach((key, index) => {
+                text += `\n${index + 1}. ${key}`;
+            });
+            socket.send(JSON.stringify({ message: text }));
+        }
+      
     });
 
     // Handle client disconnection
