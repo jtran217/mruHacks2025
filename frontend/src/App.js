@@ -8,28 +8,27 @@ import JoinGame from './JoinGame';
 function HomePage() {
   const [view, setView] = useState(null);
   const [wsMessage, setWsMessage] = useState('');
+  const [gameID, setGameID] = useState('');
+  const [wsUrl, setWsUrl] = useState('');
 
-useEffect(() => {
-    const socket = new WebSocket('ws://localhost:3001'); // Replace with our websocket server
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'branch') {
-          setWsMessage(data.message); // Only store messages of type 'branch'
-        }
-      } catch (err) {
-        console.error('Invalid WebSocket message:', event.data);
+  const handleNewGame = async () => {
+    setView('new');
+    try {
+      const res = await fetch('http://10.239.74.30:12000/api/newGame');
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to create game');
       }
-    };
 
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
+      const data = await res.json();
+      setWsUrl(data.wsUrl); // Save the WebSocket URL
+      setGameID(data.gameID);
+      console.log(`Game created! WebSocket URL: ${data.wsUrl}, GameID: ${data.gameID}`);
+    } catch (err) {
+      console.error('Error creating game:', err.message);
+    }
+  };
 
 
   return (
@@ -38,7 +37,7 @@ useEffect(() => {
         <>
           <h1 className="homepage-title">Dungeon Links</h1>
           <div className="button-group">
-          <button className="btn btn-primary" onClick={() => setView('new')}>New Game</button>
+          <button className="btn btn-primary" onClick={() => handleNewGame()}>New Game</button>
           <button className="btn btn-primary" onClick={() => setView('join')}>Join Game</button>
           </div>
         </>
@@ -46,7 +45,7 @@ useEffect(() => {
 
       <div className="content-wrapper">
         <div className="content-box">
-          {view === 'new' && <NewGame />}
+          {view === 'new' && <NewGame gameID={gameID}/>}
           {view === 'join' && <JoinGame />}
         </div>
       </div>
