@@ -10,6 +10,9 @@ function HomePage() {
   const [wsMessage, setWsMessage] = useState('');
   const [gameID, setGameID] = useState('');
   const [wsUrl, setWsUrl] = useState('');
+  const [socket, setSocket] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [error, setError] = useState(null);
 
   const handleNewGame = async () => {
     setView('new');
@@ -30,6 +33,43 @@ function HomePage() {
     }
   };
 
+  const connectToServer = (code)=> {
+    setWsUrl(`ws://10.239.74.30:${code}`);
+    console.log(wsUrl)
+    if (!wsUrl) {
+      setError('WebSocket URL is not set. Create a game first.');
+      return;
+    }
+
+    try {
+      const ws = new WebSocket(wsUrl);
+      setSocket(ws);
+
+      ws.onopen = () => {
+        console.log('Connected to game WebSocket server');
+        ws.send(JSON.stringify({ message: 'Hello from client!' }));
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log('Message from server:', data.message);
+        setMessages((prev) => [...prev, data.message]);
+      };
+
+      ws.onerror = (err) => {
+        console.error('WebSocket error:', err);
+        setError('WebSocket error occurred');
+      };
+
+      ws.onclose = () => {
+        console.log('Disconnected from game WebSocket server');
+      };
+    } catch (err) {
+      console.error('Error connecting to WebSocket:', err.message);
+      setError(err.message);
+    }
+  
+  }
 
   return (
     <div className="homepage-container text-center">
@@ -46,7 +86,7 @@ function HomePage() {
       <div className="content-wrapper">
         <div className="content-box">
           {view === 'new' && <NewGame gameID={gameID}/>}
-          {view === 'join' && <JoinGame />}
+          {view === 'join' && <JoinGame submitCode={connectToServer} />}
         </div>
       </div>
     </div>
