@@ -73,7 +73,7 @@ app.get("/api/newGame", (req, res) => {
       message: `Game ${gameID} created!`,
       wsUrl: `ws://10.239.74.30:${address.port}`,
       // Change IP when testing server on your machine using ipconfig getifaddr en0
-      gameCode: address.port,
+      gameID: address.port,
     });
   });
 });
