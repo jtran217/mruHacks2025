@@ -18,7 +18,8 @@ function HomePage() {
   const handleNewGame = async () => {
     setView('new');
     try {
-      const res = await fetch('http://10.239.74.30:12000/api/newGame');
+      // Change IP
+      const res = await fetch('http://10.0.0.37:12000/api/newGame');
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -37,7 +38,8 @@ function HomePage() {
   };
 
   const connectToServer = (code) => {
-    const url = `ws://10.239.74.30:${code}`;
+    // Change IP
+    const url = `ws://10.0.0.37:${code}`;
     setWsUrl(url);
     if (!url) {
       setError('WebSocket URL is not set. Create a game first.');
