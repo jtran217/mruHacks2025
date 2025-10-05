@@ -50,7 +50,6 @@ function HomePage() {
 
       ws.onopen = () => {
         console.log('Connected to game WebSocket server');
-        ws.send(JSON.stringify({ message: 'Hello from client!' }));
       };
 
       ws.onmessage = (event) => {
