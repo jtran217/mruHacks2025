@@ -1,0 +1,67 @@
+/* GameRoom.css */
+
+/* Container styling */
+.game-room-container {
+  background-color: rgba(30, 30, 30, 0.9); /* dark semi-transparent background */
+  border-radius: 20px;
+  padding: 2rem;
+  color: #f5f5f5;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Game code header */
+.game-code {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ffd700; /* gold */
+}
+
+/* Story card */
+.story-card {
+  background-color: #2c2c2c;
+  border: none;
+  border-radius: 12px;
+  color: #e0e0e0;
+}
+
+/* Message log */
+.message-card {
+  background-color: #1f1f1f;
+  border: none;
+  border-radius: 12px;
+  color: #c0c0c0;
+}
+
+/* Effect card */
+.effect-card {
+  background-color: #f8f9fa;
+  border-left: 5px solid #17a2b8; /* info color */
+  border-radius: 8px;
+  color: #333;
+}
+
+/* Options card */
+.options-card {
+  background-color: #343a40;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+}
+
+/* Option buttons */
+.options-card .btn {
+  min-width: 120px;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.options-card .btn:hover {
+  transform: scale(1.05);
+}
+
+/* Waiting message */
+.waiting-message {
+  font-style: italic;
+  color: #ccc;
+}
