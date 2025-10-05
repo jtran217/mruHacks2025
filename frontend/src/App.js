@@ -28,21 +28,23 @@ function HomePage() {
       setWsUrl(data.wsUrl); // Save the WebSocket URL
       setGameID(data.gameID);
       console.log(`Game created! WebSocket URL: ${data.wsUrl}, GameID: ${data.gameID}`);
+      connectToServer(data.gameID);
     } catch (err) {
       console.error('Error creating game:', err.message);
+      setError('Error creating game:', err.message);
     }
   };
 
-  const connectToServer = (code)=> {
-    setWsUrl(`ws://10.239.74.30:${code}`);
-    console.log(wsUrl)
-    if (!wsUrl) {
+  const connectToServer = (code) => {
+    const url = `ws://10.239.74.30:${code}`;
+    setWsUrl(url);
+    if (!url) {
       setError('WebSocket URL is not set. Create a game first.');
       return;
     }
 
     try {
-      const ws = new WebSocket(wsUrl);
+      const ws = new WebSocket(url);
       setSocket(ws);
 
       ws.onopen = () => {
