@@ -35,7 +35,7 @@ app.get("/api/newGame", (req, res) => {
   // Handle WebSocket connections for this game
   wss.on("connection", (ws) => {
     console.log(`New client connected to game: ${gameID}`);
-
+    broadcastConnectionCount(wss);
     // Send a welcome message to the client
     ws.send(JSON.stringify({ message: `Welcome to game ${gameID}!` }));
 
@@ -71,12 +71,23 @@ app.get("/api/newGame", (req, res) => {
     );
     res.json({
       message: `Game ${gameID} created!`,
-      wsUrl: `ws://10.239.74.30:${address.port}`,
       // Change IP when testing server on your machine using ipconfig getifaddr en0
+      wsUrl: `ws://10.239.74.30:${address.port}`,
       gameID: address.port,
     });
   });
 });
+
+function broadcastConnectionCount(wss) {
+  const count = wss.clients.size; // number of connected clients
+  const payload = JSON.stringify({ type: "connectionCount", count });
+
+  for (const client of wss.clients) {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(payload);
+    }
+  }
+}
 
 // Start the main HTTP server
 const server = http.createServer(app);
