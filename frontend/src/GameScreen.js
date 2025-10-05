@@ -1,42 +1,16 @@
-// import './GameScreen.css';
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import './GameScreen.css';
 
-function GameScreen({ handleEnter }) {
-  const [inputCommand, setInputCommand] = useState("");
+function GameScreen({ handleEnter, message }) {
+  const [input, setInput] = useState("");
 
   const handleKeyPress = (event) =>
   {
     if (event.key === "Enter")
     {
-        handleEnter(inputCommand);
+        handleEnter(input);
     }
   }
-  return (
-    <div className="GameScreen">
-      <h1> GameScreen </h1>
-      <div>
-        <input
-          type="text"
-          value={inputCommand}
-          placeholder="Enter Command"
-          onChange={(e) => {
-            setInputCommand(e.target.value);
-          }}
-          onKeyDown={handleKeyPress}
-        ></input>
-import React, { useState } from 'react';
-import './GameScreen.css';
-
-function GameScreen({message}) {
-  const [story, setStory] = useState(''); // State to hold the story text
-  const [input, setInput] = useState(''); // State to hold the input text
-
-  const handleAddToStory = () => {
-    if (input.trim()) {
-      setStory((prev) => (prev ? `${prev} ${input}` : input)); // Append input to the story
-      setInput(''); // Clear the input box
-    }
-  };
 
   return (
     <div className="game-room">
@@ -50,10 +24,12 @@ function GameScreen({message}) {
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter your text..."
-        />
-        <button onClick={handleAddToStory}>Add to Story</button>
+          placeholder="Enter Command"
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
+          onKeyDown={handleKeyPress}
+        ></input>
       </div>
     </div>
   );
