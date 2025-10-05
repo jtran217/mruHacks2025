@@ -16,7 +16,7 @@
   /*Background Image Settings */
   background-image: url('./Home_background.jpg');
   background-size: cover;
-  background-position: -242px;
+  background-position: center;
 }
 
 /* Title */

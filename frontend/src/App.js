@@ -96,7 +96,7 @@ function HomePage() {
         <div className="content-box">
           {view === 'new' && <NewGame gameID={gameID}/>}
           {view === 'join' && <JoinGame submitCode={connectToServer} />}
-          {view === 'game' && <GameScreen />}
+          {view === 'game' && <GameScreen message={messages[messages.length-1]} />}
         </div>
       </div>
     </div>
