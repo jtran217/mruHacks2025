@@ -4,6 +4,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import NewGame from './NewGame';
 import JoinGame from './JoinGame';
+import GameScreen from './GameScreen';
 
 function HomePage() {
   const [view, setView] = useState(null);
@@ -95,7 +96,7 @@ function HomePage() {
         <div className="content-box">
           {view === 'new' && <NewGame gameID={gameID}/>}
           {view === 'join' && <JoinGame submitCode={connectToServer} />}
-          {/* Render GameScreen when view === 'game' */}
+          {view === 'game' && <GameScreen />}
         </div>
       </div>
     </div>
