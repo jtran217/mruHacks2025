@@ -54,7 +54,13 @@ function HomePage() {
 
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        console.log('Message from server:', data.message);
+        if (data.type === "connectionCount" && data.count === 2) 
+        {
+          setView('game');
+        } else {
+          console.log("Message from server:", data.message);
+          setMessages((prev) => [...prev, data.message]);
+        }
         setMessages((prev) => [...prev, data.message]);
       };
 
@@ -89,6 +95,7 @@ function HomePage() {
         <div className="content-box">
           {view === 'new' && <NewGame gameID={gameID}/>}
           {view === 'join' && <JoinGame submitCode={connectToServer} />}
+          {/* Render GameScreen when view === 'game' */}
         </div>
       </div>
     </div>
