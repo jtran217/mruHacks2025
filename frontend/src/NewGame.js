@@ -1,10 +1,10 @@
 import './NewGame.css';
 
-function NewGame() {
+function NewGame({ gameID }) {
   return (
     <div className= 'NewGame'>
         <h1> Join Game With This Code:</h1>
-        <h2> CODE CODE CODE</h2>
+        <h2> {gameID}</h2>
     </div>
   )
 }
