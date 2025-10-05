@@ -23,9 +23,6 @@ app.get("/api/newGame", (req, res) => {
   const gameServer = http.createServer();
   const wss = new WebSocket.Server({ server: gameServer });
 
-  // Store the WebSocket server in the map
-
-//   const gameID = gameServer.address().port;
   const gameID = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
 
   gameServers.set(gameID, { server: gameServer, wss });
@@ -42,14 +39,15 @@ app.get("/api/newGame", (req, res) => {
     // Listen for messages from the client
     ws.on("message", (message) => {
       console.log(`Game ${gameID} received: ${message}`);
+      ws.send(JSON.stringify({ message: `${message}` }));
       // Broadcast the message to all clients in this game
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(
-            JSON.stringify({ message: `Game ${gameID}: ${message}` })
-          );
-        }
-      });
+    //   wss.clients.forEach((client) => {
+    //     if (client.readyState === WebSocket.OPEN) {
+    //       client.send(
+    //         JSON.stringify({ message: `Game ${gameID}: ${message}` })
+    //       );
+    //     }
+    //   });
     });
 
     // Handle client disconnection
